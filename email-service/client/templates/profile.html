@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+	Profile
+{% endblock %}
+
+
+{% block content %}
+	<div class="jumbotron {% if dark_theme %}bg-secondary text-light{% endif %}" align="center">
+		<h1 class="display-4">{{ user.username }}</h1>
+
+		<hr class="my-4">
+
+		<form method="POST" class="mb-2" action="{{ url_for(name="switch_f2f") }}">
+			{% include "_includes/csrf-token.html" %}
+
+			<button type="submit" class="btn btn-{% if f2f_enabled %}danger{% else %}success{% endif %}">
+				{% if f2f_enabled %}Disable{% else %}Enable{% endif %} F2F mode
+			</button>
+		</form>
+
+		<a href="{{ url_for(name="delete_account_get") }}" class="btn btn-danger mb-2" role="button">Delete account</a>
+
+		<p class="lead">
+			<button class="btn btn-primary btn-lg btn-block mb-2" onclick="showOrHidePublicKeyPemBase64();">Public key</button>
+			<div id="public-key-pem-base64" class="text-break mb-4" style="display: none;">
+				<p>{{ public_key_pem_base64 }}</p>
+				<image width="800" class="mt-2" src="data:image/png;base64,{{ public_key_qrcode }}" />
+			</div>
+
+			<button class="btn btn-danger btn-lg btn-block mb-2" onclick="showOrHidePrivateKeyPemBase64();">Private key</button>
+			<div id="private-key-pem-base64" class="text-break" style="display: none;">
+				<p>{{ private_key_pem_base64 }}</p>
+				<image width="800" class="mt-2" src="data:image/png;base64,{{ private_key_qrcode }}" />
+			</div>
+		</p>
+	</div>
+{% endblock %}
+
+
+{% block js %}
+	<script src="/static/profile.js"></script>
+{% endblock %}

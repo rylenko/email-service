@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+	Emails list
+{% endblock %}
+
+
+{% block content %}
+	<div align="center" class="mb-2">
+		<a href="{{ url_for(name="send_email_get") }}" class="btn btn-success mb-2" role="button">Send</a>
+
+		<form method="POST" action="{{ url_for(name="load_emails") }}">
+			{% include "_includes/csrf-token.html" %}
+			<button type="submit" class="btn btn-success">Load new emails</button>
+		</form>
+	</div>
+
+	<div class="alert alert-warning">
+		On nodes and clients, emails are stored for a certain time. For example, on your client,
+		emails will be stored for {{ emails_max_age_secs }} seconds and then deleted.
+	</div>
+
+	<h1 align="center" class="mb-4">Emails list:</h1>
+
+	{% if pagination.items %}
+		{% for email in pagination.items %}
+			<div class="card mb-4 {% if dark_theme %}bg-secondary{% endif %}">
+				<div class="card-header">
+					Sent {{ email.data.sent_at | date(format="%d.%m.%Y at %H:%M:%S") }}
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">{{ email.data.title }}</h5>
+					<a href="{{ url_for(name="email", elements=[email.id | as_str]) }}" class="btn btn-primary">Read</a>
+				</div>
+				<div class="card-footer {% if not dark_theme %}text-muted{% endif %}">
+					{% if email.data.files %}
+						Files: {{ email.data.files | length }}.
+					{% else %}
+						Files: 0
+					{% endif %}
+					Sender: {{ email.data.sender_username }} <br/>
+				</div>
+			</div>
+		{% endfor %}
+
+		{% if pagination.pages > 1 %}
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					<li class="page-item {% if not pagination.has_previous_page %} disabled {% endif %}">
+						<a class="page-link" aria-label="Previous"
+   						href="{{ url_for(name="emails") ~ "?page=" ~ pagination.previous_page }}">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+
+					{% for number in range(start=1, end=pagination.pages + 1) %}
+						{% if number > pagination.current_page - 3 and number < pagination.current_page + 3 %}
+							<li class="page-item {% if number == pagination.current_page %} active {% endif %}">
+								<a class="page-link" href="{{ url_for(name="emails") ~ "?page=" ~ number }}">
+									{{ number }}
+								</a>
+							</li>
+						{% endif %}
+					{% endfor %}
+
+					<li class="page-item {% if not pagination.has_next_page %} disabled {% endif %}">
+						<a class="page-link" aria-label="Next"
+   						href="{{ url_for(name="emails") ~ "?page=" ~ pagination.next_page }}">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		{% endif %}
+	{% else %}
+		<h2 align="center">You haven't received any emails yet.</h2>
+	{% endif %}
+{% endblock %}

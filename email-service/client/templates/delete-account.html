@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% import "_macros.html" as macros %}
+
+
+{% block title %}
+	Delete account
+{% endblock %}
+
+
+{% block content %}
+	<h2 align="center" class="mb-4">
+		Enter the password to delete the account:
+	</h2>
+
+	{% include "_includes/form-errors.html" %}
+
+	<form method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
+		{% include "_includes/csrf-token.html" %}
+
+		{{ macros::field(label="Password", min_len=6, max_len=50, prompt="Enter password of account...", type="password") }}
+
+		<div class="form-group mt-4">
+			<button type="submit" class="btn btn-danger">Delete</button>
+		</div>
+	</form>
+{% endblock %}

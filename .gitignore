@@ -1,0 +1,9 @@
+target
+__pycache__
+.mypy_cache
+
+.env
+
+ports.json
+email-service/node/config.json
+email-service/client/config.json

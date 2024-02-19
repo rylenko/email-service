@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  node:
+    build:
+      context: ../email-service
+      dockerfile: ./node/Dockerfile
+    container_name: node
+    env_file: ../email-service/node/.env
+    environment:
+      - CONFIG_PATH=${NODE_CONFIG_PATH_DOCKER}
+    volumes:
+      - ../email-service/node:/usr/src/node
+    depends_on:
+      - node-db
+    ports:
+      - ${NODE_PORT}:8000
+
+  node-db:
+    image: postgres
+    container_name: node-db
+    env_file: ../email-service/node/.env
+    volumes:
+      - node-pgdata:/var/lib/postgresql/node-data
+    expose:
+      - 5432
+
+volumes:
+  node-pgdata:

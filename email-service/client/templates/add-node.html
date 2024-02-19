@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% import "_macros.html" as macros %}
+
+
+{% block title %}
+	Add node
+{% endblock %}
+
+
+{% block content %}
+	<h2 align="center" class="mb-4">
+		Enter the data for adding a new node:
+	</h2>
+
+	{% include "_includes/form-errors.html" %}
+
+	<form method="POST">
+		{% include "_includes/csrf-token.html" %}
+
+		{{ macros::field(label="Address", prompt="Enter the node address...", min_len=4, max_len=80) }}
+		{{ macros::field(label="Password", prompt="Enter the node password..", type="password")}}
+
+		<div class="form-group mt-4">
+			<button type="submit" class="btn btn-success">Add</button>
+		</div>
+	</form>
+{% endblock %}

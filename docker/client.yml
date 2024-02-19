@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  client:
+    build:
+      context: ../email-service
+      dockerfile: ./client/Dockerfile
+    container_name: client
+    env_file: ../email-service/client/.env
+    environment:
+      - CONFIG_PATH=${CLIENT_CONFIG_PATH_DOCKER}
+    volumes:
+      - ../email-service/client:/usr/src/client
+    depends_on:
+      - client-db
+    expose:
+      - 8000
+
+  client-db:
+    image: postgres
+    container_name: client-db
+    env_file: ../email-service/client/.env
+    volumes:
+      - client-pgdata:/var/lib/postgresql/client-data
+    expose:
+      - 5432
+
+  client-nginx:
+    image: nginx
+    container_name: client-nginx
+    volumes:
+      - ../email-service/client/static:/etc/nginx/static
+      - ./client-nginx/certs:/etc/nginx/certs
+      - ./client-nginx/templates:/etc/nginx/templates
+    environment:
+      - PORT=${CLIENT_PORT}
+    depends_on:
+      - client
+    ports:
+      - ${CLIENT_PORT}:${CLIENT_PORT}
+
+volumes:
+  client-pgdata:

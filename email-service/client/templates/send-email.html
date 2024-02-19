@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% import "_macros.html" as macros %}
+
+
+{% block title %}
+	Send email
+{% endblock %}
+
+
+{% block content %}
+	<h2 align="center" class="mb-4">
+		Enter the data for sending a new email:
+	</h2>
+
+	{% include "_includes/form-errors.html" %}
+
+	<form method="POST" enctype="multipart/form-data">
+		{% include "_includes/csrf-token.html" %}
+
+		<div class="form-group">
+			<label for="recipient_public_key_pem_base64">Recipient public key</label>
+			<select name="recipient_public_key_pem_base64" class="form-control">
+				{% for friend in friends %}
+					<option value="{{ friend.public_key }}">{{ friend.username }}</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		{{ macros::field(label="Title", min_len=3, max_len=200, prompt="Enter title of email...") }}
+
+		<div class="form-group">
+			<label for="text">Text</label>
+			<textarea required class="form-control" name="text" placeholder="Enter text of email..."></textarea>
+		</div>
+
+		<div class="form-group">
+			<label for="files">Files</label>
+			<input type="file" name="files" multiple/>
+		</div>
+
+		<div class="form-group">
+			<button type="submit" class="btn btn-success">Send</button>
+		</div>
+	</form>
+{% endblock %}
+
+
+{% block js %}
+	<script src="/static/register.js"></script>
+{% endblock %}

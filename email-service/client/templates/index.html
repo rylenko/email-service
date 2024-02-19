@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+	Home
+{% endblock %}
+
+
+{% block content %}
+	<div align="center">
+		<h1 id="time-widget"></h1>
+
+		<h1>Welcome to the Email-Service{% if user %}, {{ user.username }}!{% else %}.{% endif %}</h1>
+		<h2>Version: 1.7.1</h2>
+	</div>
+{% endblock %}
+
+
+{% block js %}
+	<script src="/static/index.js"></script>
+{% endblock %}

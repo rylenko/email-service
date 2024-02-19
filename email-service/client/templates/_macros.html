@@ -1,0 +1,13 @@
+
+{% macro field(label, prompt, min_len=-1, max_len=-1, type="text") %}
+	{% set name = label | lower | replace(from=" ", to="_") %}
+
+	<div class="form-group">
+		<label for="{{ name }}">{{ label }}</label>
+		<input type="{{ type }}" name="{{ name }}" class="form-control"
+			{% if min_len != -1 %}required minlength="{{ min_len }}"{% endif %}
+			{% if max_len != -1 %}maxlength="{{ max_len }}"{% endif %}
+			placeholder="{{ prompt }}"
+		/>
+	</div>
+{% endmacro field %}

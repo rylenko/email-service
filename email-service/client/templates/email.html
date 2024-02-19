@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+	{{ email.data.title }}
+{% endblock %}
+
+
+{% block content %}
+	{% if friend_same_public_key %}
+		<div class="alert alert-primary" role="alert">
+			This user has been added to your friends list under the name "{{ friend_same_public_key.username }}".
+		</div>
+	{% elif friend_same_username_exists %}
+		<div class="alert alert-warning" role="alert">
+			This user is not the user that is on your friends list.
+		</div>
+	{% else %}
+		<div class="alert alert-warning" role="alert">
+			The user is not your friend.
+		</div>
+	{% endif %}
+
+	<div class="card mb-4 {% if dark_theme %}bg-secondary{% endif %}">
+		<div class="card-body">
+			<h5 class="card-title">{{ email.data.title }}</h5>
+			<p class="card-text">{{ email.data.text }}</p>
+			<p class="card-text">
+				<small {% if not dark_theme %}class="text-muted"{% endif %}>
+					{% if email.data.files %}
+						Files:
+
+						{% for file in email.data.files %}
+							<a download="{{ file.name }}"
+   							href="data:application/octet-stream;base64,{{ file.data }}"
+							>{{ file.name }}</a>
+						{% endfor %}
+
+						<br/>
+					{% endif %}
+
+					Sent {{ email.data.sent_at | date(format="%d.%m.%Y at %H:%M:%S") }} <br/>
+				</small>
+			</p>
+		</div>
+		<div class="card-footer {% if not dark_theme %}text-muted{% endif %}">
+			Sender: {{ email.data.sender_username }} <br/>
+			Sender's public key: {{ email.sender_public_key }}
+		</div>
+	</div>
+{% endblock %}

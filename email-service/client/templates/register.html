@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% import "_macros.html" as macros %}
+
+
+{% block title %}
+	Register
+{% endblock %}
+
+
+{% block content %}
+	<h2 align="center" class="mb-4">
+		Enter the data for registering a new account:
+	</h2>
+
+	{% include "_includes/form-errors.html" %}
+
+	<form method="POST">
+		{% include "_includes/csrf-token.html" %}
+
+		{{ macros::field(label="Username", min_len=3, max_len=45, prompt="Enter username of account...") }}
+		{{ macros::field(label="Password", min_len=6, max_len=50, prompt="Enter password of account...", type="password") }}
+		{{ macros::field(label="Password Confirm", min_len=6, max_len=50, prompt="Confirm password of account...", type="password") }}
+
+		<div id="private-key-pem-base64-block" class="form-group" style="display: none;">
+			<label for="private-key-pem-base64">Private Key (Base-64 format)</label>
+			<input type="password" id="private-key-pem-base64" name="private_key_pem_base64" class="form-control"
+				disabled="disabled" placeholder="Enter private key of account in Base-64 format..."
+			/>
+		</div>
+
+		<div class="form-group mt-4">
+			<button type="submit" class="btn btn-success">Register</button>
+			<button type="button" class="btn btn-primary" onclick="showOrHidePrivateKeyInput();">Load private key</button>
+		</div>
+	</form>
+{% endblock %}
+
+
+{% block js %}
+	<script src="/static/register.js"></script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+	Nodes list
+{% endblock %}
+
+
+{% block content %}
+	<div align="center" class="mb-4">
+		<a href="{{ url_for(name="add_node_get") }}" class="btn btn-success" role="button">Add</a>
+
+		{% if nodes %}
+			<form method="POST">
+				<button type="submit" class="btn btn-primary mt-2">Check connections</button>
+			</form>
+		{% endif %}
+	</div>
+
+	<h1 align="center" class="mb-2">Nodes list:</h1>
+
+	{% if check_connection_results %}
+		{% for result in check_connection_results %}
+			<div role="alert" class="alert alert-dismissible fade show alert-{% if result.1 %}danger{% else %}success{% endif %}">
+				<strong>{{ result.0 }}</strong>: {% if result.1 %}{{ result.1 }}{% else %}Success{% endif %}
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		{% endfor %}
+	{% endif %}
+
+	{% if nodes %}
+		{% for node in nodes %}
+			<div class="card mb-4 {% if dark_theme %}bg-secondary{% endif %}">
+				<div class="card-body">
+					<h5 class="card-title">{{ node.address }}</h5>
+
+					<form method="POST" class="mb-2"
+						onsubmit="return confirm('Are you sure you want to delete your node?');"
+						action="{{ url_for(name="delete_node", elements=[node.id | as_str]) }}"
+					>
+						{% include "_includes/csrf-token.html" %}
+						<button type="submit" class="btn btn-danger">Delete</button>
+					</form>
+
+					{% if node.password %}
+						<p class="card-text" style="display: none;" id="{{ node.id }}-password">{{ node.password }}</p>
+						<button class="btn btn-primary" onclick='showOrHidePassword("{{ node.id }}");'>Password</a>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	{% else %}
+		<h2 align="center">You haven't added any nodes yet.</h2>
+	{% endif %}
+{% endblock %}
+
+
+{% block js %}
+	<script src="/static/nodes.js"></script>
+{% endblock %}

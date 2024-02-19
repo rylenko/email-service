@@ -1,0 +1,31 @@
+[package]
+name = "client"
+version = "1.1.0"
+edition = "2018"
+
+[dependencies]
+actix-identity = "0.5.2"
+actix-multipart = "0.4.0"
+actix-session = { version = "0.7.0", features = ["cookie-session"] }
+async-socks5 = "0.5.1"
+actix-threadpool = "0.3.3"
+actix-web = "4.1.0"
+anyhow = "1.0.69"
+base64 = "0.13.0"
+bincode = "1.3.3"
+chrono = "0.4.19"
+common = { path = "../common" }
+diesel = { version = "2.0.4", features = ["chrono"] }
+diesel-async = { version = "0.2.2", features = ["deadpool", "postgres"] }
+futures = "0.3.21"
+image = { version = "0.23.0", features = ["png"] }
+lazy_static = "1.4.0"
+openssl = "0.10.41"
+qrcode = "0.12.0"
+serde_json = "1.0.82"
+serde = { version = "1.0.140", features = ["derive", "rc"] }
+socks = "0.3.4"
+tera = "1.16.0"
+thiserror = "1.0.40"
+tokio = "1.20.0"
+validator = { version = "0.15.0", features = ["derive"] }

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+	Friends list
+{% endblock %}
+
+
+{% block content %}
+	<div align="center">
+		<a href="{{ url_for(name="add_friend_get") }}" class="btn btn-success" role="button">Add</a>
+	</div>
+
+	<h1 align="center" class="mb-4">Friends list:</h1>
+
+	{% if friends %}
+		{% for friend in friends %}
+			<div class="card mb-4 {% if dark_theme %}bg-secondary{% endif %}">
+				<div class="card-body">
+					<h5 class="card-title">{{ friend.username }}</h5>
+
+					<form method="POST" class="mb-2"
+						onsubmit="return confirm('Are you sure you want to delete your friend?');"
+						action="{{ url_for(name="delete_friend", elements=[friend.id | as_str]) }}"
+					>
+						{% include "_includes/csrf-token.html" %}
+						<button type="submit" class="btn btn-danger">Delete</button>
+					</form>
+
+					<p class="card-text" style="display: none;" id="{{ friend.id }}-public-key">{{ friend.public_key }}</p>
+					<button class="btn btn-primary" onclick='showOrHidePublicKey("{{ friend.id }}");'>Public key</a>
+				</div>
+			</div>
+		{% endfor %}
+	{% else %}
+		<h2 align="center">You haven't added any friends yet.</h2>
+	{% endif %}
+{% endblock %}
+
+
+{% block js %}
+	<script src="/static/friends.js"></script>
+{% endblock %}

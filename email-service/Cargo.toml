@@ -1,0 +1,26 @@
+[package]
+name = "email-service"
+version = "1.7.1" # README.md, client/templates/index.html
+keywords = ["cryptography", "decentralization", "hidden", "email", "e2e", "f2f", "p2p"]
+description = "Hidden decentralized email service with E2E encryption and F2F support."
+license-file = "LICENSE"
+readme = "../README.md"
+edition = "2018"
+
+[workspace]
+members = [
+	"client",
+	"common",
+	"node",
+]
+
+[[bin]]
+name = "launcher"
+path = "launcher/main.rs"
+
+[dependencies]
+anyhow = "1.0.69"
+client = { path = "client" }
+common = { path = "common" }
+node = { path = "node" }
+tokio = { version = "1.20.0", features = ["rt-multi-thread"] }
